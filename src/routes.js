@@ -1,13 +1,13 @@
 import React from 'react'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 
-import Main from './pages/Main'
+import Home from './pages/Home'
+import Cart from './pages/Cart'
 
 const Routes = () => (
-  <BrowserRouter>
-    <Switch>
-      <Route path="/" exact component={Main} />
-    </Switch>
-  </BrowserRouter>
+  <Switch>
+    <Route path="/" exact component={Home} />
+    <Route path="/cart" component={Cart} />
+  </Switch>
 )
 export default Routes
