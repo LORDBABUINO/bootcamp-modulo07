@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { MdAddShoppingCart } from 'react-icons/md'
+import { func } from 'prop-types'
 import api from '../../services/api'
 import { formatPrice } from '../../util/format'
 
 import { ProductList } from './styles'
 
-export default class Home extends Component {
+class Home extends Component {
   state = {
     products: [],
   }
@@ -19,17 +21,28 @@ export default class Home extends Component {
     this.setState({ products: data })
   }
 
+  handleAddProduct = async product => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'ADD_TO_CART',
+      product,
+    })
+  }
+
   render() {
     const { products } = this.state
     return (
       <ProductList>
-        {products.map(({ id, image, title, price }) => (
-          <li key={id}>
-            <img src={image} alt={title} />
-            <strong>{title}</strong>
-            <span>{price}</span>
+        {products.map(product => (
+          <li key={product.id}>
+            <img src={product.image} alt={product.title} />
+            <strong>{product.title}</strong>
+            <span>{product.price}</span>
 
-            <button type="button">
+            <button
+              type="button"
+              onClick={async () => this.handleAddProduct(product)}
+            >
               <div>
                 <MdAddShoppingCart size={16} color="white" /> 3
               </div>
@@ -41,3 +54,9 @@ export default class Home extends Component {
     )
   }
 }
+
+Home.propTypes = {
+  dispatch: func.isRequired,
+}
+
+export default connect()(Home)
