@@ -32,6 +32,7 @@ module.exports = {
     ],
     'react/state-in-constructor': ['warn', 'never'],
     'import/prefer-default-export': 'off',
+    'no-param-reassign': 'off',
     'no-console': ['error', { allow: ['tron'] }],
     semi: ['error', 'never'],
   },
