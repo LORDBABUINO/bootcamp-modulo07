@@ -11,7 +11,14 @@ import {
 import * as CartActions from '../../store/modules/cart/actions'
 import { Container, ProductTable, Total } from './styles'
 
-function Cart({ cart, removeFromCart }) {
+function Cart({ cart, removeFromCart, updateAmount }) {
+  const increment = (id, amount) => {
+    updateAmount(id, amount + 1)
+  }
+  const decrement = (id, amount) => {
+    updateAmount(id, amount - 1)
+  }
+  /**/
   return (
     <Container>
       <ProductTable>
@@ -26,7 +33,7 @@ function Cart({ cart, removeFromCart }) {
         </thead>
         <tbody>
           {cart.map(({ id, image, title, price, amount }) => (
-            <tr>
+            <tr key={title}>
               <td>
                 <img src={image} alt={title} />
               </td>
@@ -36,11 +43,11 @@ function Cart({ cart, removeFromCart }) {
               </td>
               <td>
                 <div>
-                  <button type="button">
+                  <button type="button" onClick={() => decrement(id, amount)}>
                     <MdRemoveCircleOutline size={20} color="#7159c1" />
                   </button>
-                  <input type="number" readOnly="" value={amount} />
-                  <button type="button">
+                  <input type="number" readOnly value={amount} />
+                  <button type="button" onClick={() => increment(id, amount)}>
                     <MdAddCircleOutline size={20} color="#7159c1" />
                   </button>
                 </div>
@@ -68,6 +75,12 @@ function Cart({ cart, removeFromCart }) {
   )
 }
 
+const mapDispatchToProps = dispatch => bindActionCreators(CartActions, dispatch)
+
+const mapStateToProps = state => ({
+  cart: state.cart,
+})
+
 Cart.propTypes = {
   cart: arrayOf(
     shape({
@@ -78,13 +91,8 @@ Cart.propTypes = {
       amount: number,
     })
   ).isRequired,
-  dispatch: func.isRequired,
+  removeFromCart: func.isRequired,
 }
-
-const mapDispatchToProps = dispatch => bindActionCreators(CartActions, dispatch)
-const mapStateToProps = state => ({
-  cart: state.cart,
-})
 
 export default connect(
   mapStateToProps,
