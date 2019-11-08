@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { arrayOf, shape, func, string, number } from 'prop-types'
 import {
   MdRemoveCircleOutline,
   MdAddCircleOutline,
@@ -8,7 +9,7 @@ import {
 
 import { Container, ProductTable, Total } from './styles'
 
-function Cart({ cart }) {
+function Cart({ cart, dispatch }) {
   return (
     <Container>
       <ProductTable>
@@ -22,21 +23,21 @@ function Cart({ cart }) {
           </tr>
         </thead>
         <tbody>
-          {cart.map(product => (
+          {cart.map(({ id, image, title, price, amount }) => (
             <tr>
               <td>
-                <img src={product.image} alt={product.title} />
+                <img src={image} alt={title} />
               </td>
               <td>
-                <strong>{product.title}</strong>
-                <span>{product.price}</span>
+                <strong>{title}</strong>
+                <span>{price}</span>
               </td>
               <td>
                 <div>
                   <button type="button">
                     <MdRemoveCircleOutline size={20} color="#7159c1" />
                   </button>
-                  <input type="number" readOnly="" value={product.amount} />
+                  <input type="number" readOnly="" value={amount} />
                   <button type="button">
                     <MdAddCircleOutline size={20} color="#7159c1" />
                   </button>
@@ -46,7 +47,10 @@ function Cart({ cart }) {
                 <strong>R$258,80</strong>
               </td>
               <td>
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() => dispatch({ type: 'REMOVE_FROM_CART', id })}
+                >
                   <MdDelete size={20} color="#7159c1" />
                 </button>
               </td>
@@ -63,6 +67,19 @@ function Cart({ cart }) {
       </footer>
     </Container>
   )
+}
+
+Cart.propTypes = {
+  cart: arrayOf(
+    shape({
+      id: number,
+      title: string,
+      price: string,
+      image: string,
+      amount: number,
+    })
+  ).isRequired,
+  dispatch: func.isRequired,
 }
 
 const mapStateToProps = state => ({
