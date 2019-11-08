@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { MdAddShoppingCart } from 'react-icons/md'
-import { func } from 'prop-types'
+import { func, number } from 'prop-types'
 
 import api from '../../services/api'
 import * as CartActions from '../../store/modules/cart/actions'
@@ -31,6 +31,7 @@ class Home extends Component {
 
   render() {
     const { products } = this.state
+    const { amount } = this.props
     return (
       <ProductList>
         {products.map(product => (
@@ -44,7 +45,8 @@ class Home extends Component {
               onClick={async () => this.handleAddProduct(product)}
             >
               <div>
-                <MdAddShoppingCart size={16} color="white" /> 3
+                <MdAddShoppingCart size={16} color="white" />{' '}
+                {amount[product.id] || 0}
               </div>
               <span>adicionar ao carrinho</span>
             </button>
@@ -55,13 +57,22 @@ class Home extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  amount: state.cart.reduce((amount, product) => {
+    amount[product.id] = product.amount
+
+    return amount
+  }, {}),
+})
+
 const mapDispatchToProps = dispatch => bindActionCreators(CartActions, dispatch)
 
 Home.propTypes = {
   addToCart: func.isRequired,
+  amount: number.isRequired,
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Home)
