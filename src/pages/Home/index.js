@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { MdAddShoppingCart } from 'react-icons/md'
-import { func, number } from 'prop-types'
+import { func, number, objectOf } from 'prop-types'
 
 import api from '../../services/api'
 import * as CartActions from '../../store/modules/cart/actions'
@@ -69,7 +69,7 @@ const mapDispatchToProps = dispatch => bindActionCreators(CartActions, dispatch)
 
 Home.propTypes = {
   addToCart: func.isRequired,
-  amount: number.isRequired,
+  amount: objectOf(number).isRequired,
 }
 
 export default connect(
