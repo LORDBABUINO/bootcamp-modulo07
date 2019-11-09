@@ -12,12 +12,12 @@ import { formatPrice } from '../../util/format'
 import * as CartActions from '../../store/modules/cart/actions'
 import { Container, ProductTable, Total } from './styles'
 
-function Cart({ cart, total, removeFromCart, updateAmount }) {
+function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
   const increment = (id, amount) => {
-    updateAmount(id, amount + 1)
+    updateAmountRequest(id, amount + 1)
   }
   const decrement = (id, amount) => {
-    updateAmount(id, amount - 1)
+    updateAmountRequest(id, amount - 1)
   }
   return (
     <Container>
@@ -101,7 +101,7 @@ Cart.propTypes = {
     })
   ).isRequired,
   removeFromCart: func.isRequired,
-  updateAmount: func.isRequired,
+  updateAmountRequest: func.isRequired,
   total: string.isRequired,
 }
 

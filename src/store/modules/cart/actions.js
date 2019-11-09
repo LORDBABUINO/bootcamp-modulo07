@@ -12,8 +12,14 @@ export const removeFromCart = id => ({
   id,
 })
 
-export const updateAmount = (id, amount) => ({
-  type: '@cart/UPDATE_AMOUNT',
+export const updateAmountRequest = (id, amount) => ({
+  type: '@cart/UPDATE_AMOUNT_REQUEST',
+  id,
+  amount,
+})
+
+export const updateAmountSuccess = (id, amount) => ({
+  type: '@cart/UPDATE_AMOUNT_SUCCESS',
   id,
   amount,
 })
