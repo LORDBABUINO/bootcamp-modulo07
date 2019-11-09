@@ -32,36 +32,38 @@ function Cart({ cart, total, removeFromCart, updateAmount }) {
           </tr>
         </thead>
         <tbody>
-          {cart.map(({ id, image, title, formatedPrice, amount, subtotal }) => (
-            <tr key={id}>
-              <td>
-                <img src={image} alt={title} />
-              </td>
-              <td>
-                <strong>{title}</strong>
-                <span>{formatedPrice}</span>
-              </td>
-              <td>
-                <div>
-                  <button type="button" onClick={() => decrement(id, amount)}>
-                    <MdRemoveCircleOutline size={20} color="#7159c1" />
+          {cart.map(
+            ({ id, image, title, priceFormatted, amount, subtotal }) => (
+              <tr key={id}>
+                <td>
+                  <img src={image} alt={title} />
+                </td>
+                <td>
+                  <strong>{title}</strong>
+                  <span>{priceFormatted}</span>
+                </td>
+                <td>
+                  <div>
+                    <button type="button" onClick={() => decrement(id, amount)}>
+                      <MdRemoveCircleOutline size={20} color="#7159c1" />
+                    </button>
+                    <input type="number" readOnly value={amount} />
+                    <button type="button" onClick={() => increment(id, amount)}>
+                      <MdAddCircleOutline size={20} color="#7159c1" />
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <strong>{subtotal}</strong>
+                </td>
+                <td>
+                  <button type="button" onClick={() => removeFromCart(id)}>
+                    <MdDelete size={20} color="#7159c1" />
                   </button>
-                  <input type="number" readOnly value={amount} />
-                  <button type="button" onClick={() => increment(id, amount)}>
-                    <MdAddCircleOutline size={20} color="#7159c1" />
-                  </button>
-                </div>
-              </td>
-              <td>
-                <strong>{subtotal}</strong>
-              </td>
-              <td>
-                <button type="button" onClick={() => removeFromCart(id)}>
-                  <MdDelete size={20} color="#7159c1" />
-                </button>
-              </td>
-            </tr>
-          ))}
+                </td>
+              </tr>
+            )
+          )}
         </tbody>
       </ProductTable>
       <footer>
