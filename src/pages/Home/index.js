@@ -19,14 +19,14 @@ class Home extends Component {
     const response = await api.get('products')
     const data = response.data.map(product => ({
       ...product,
-      FormatedPrice: formatPrice(product.price),
+      priceFormated: formatPrice(product.price),
     }))
     this.setState({ products: data })
   }
 
-  handleAddProduct = async product => {
-    const { addToCart } = this.props
-    addToCart(product)
+  handleAddProduct = async id => {
+    const { addToCartRequest } = this.props
+    addToCartRequest(id)
   }
 
   render() {
@@ -34,19 +34,18 @@ class Home extends Component {
     const { amount } = this.props
     return (
       <ProductList>
-        {products.map(product => (
-          <li key={product.id}>
-            <img src={product.image} alt={product.title} />
-            <strong>{product.title}</strong>
-            <span>{product.FormatedPrice}</span>
+        {products.map(({ id, image, title, priceFormated }) => (
+          <li key={id}>
+            <img src={image} alt={title} />
+            <strong>{title}</strong>
+            <span>{priceFormated}</span>
 
             <button
               type="button"
-              onClick={async () => this.handleAddProduct(product)}
+              onClick={async () => this.handleAddProduct(id)}
             >
               <div>
-                <MdAddShoppingCart size={16} color="white" />{' '}
-                {amount[product.id] || 0}
+                <MdAddShoppingCart size={16} color="white" /> {amount[id] || 0}
               </div>
               <span>adicionar ao carrinho</span>
             </button>
@@ -58,17 +57,17 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  amount: state.cart.reduce((amount, product) => {
-    amount[product.id] = product.amount
+  amount: state.cart.reduce((anAmount, { id, amount }) => {
+    anAmount[id] = amount
 
-    return amount
+    return anAmount
   }, {}),
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators(CartActions, dispatch)
 
 Home.propTypes = {
-  addToCart: func.isRequired,
+  addToCartRequest: func.isRequired,
   amount: objectOf(number).isRequired,
 }
 
