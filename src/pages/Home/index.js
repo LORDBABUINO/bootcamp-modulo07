@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { MdAddShoppingCart } from 'react-icons/md'
@@ -10,50 +10,42 @@ import { formatPrice } from '../../util/format'
 
 import { ProductList } from './styles'
 
-class Home extends Component {
-  state = {
-    products: [],
-  }
+function Home({ amount, addToCartRequest }) {
+  const [products, setProducts] = useState([])
 
-  async componentDidMount() {
-    const response = await api.get('products')
-    const data = response.data.map(product => ({
-      ...product,
-      priceFormated: formatPrice(product.price),
-    }))
-    this.setState({ products: data })
-  }
+  useEffect(() => {
+    ;(async () => {
+      const response = await api.get('products')
+      const data = response.data.map(product => ({
+        ...product,
+        priceFormated: formatPrice(product.price),
+      }))
+      setProducts(data)
+    })()
+  }, [])
 
-  handleAddProduct = async id => {
-    const { addToCartRequest } = this.props
+  function handleAddProduct(id) {
     addToCartRequest(id)
   }
 
-  render() {
-    const { products } = this.state
-    const { amount } = this.props
-    return (
-      <ProductList>
-        {products.map(({ id, image, title, priceFormated }) => (
-          <li key={id}>
-            <img src={image} alt={title} />
-            <strong>{title}</strong>
-            <span>{priceFormated}</span>
+  return (
+    <ProductList>
+      {products.map(({ id, image, title, priceFormated }) => (
+        <li key={id}>
+          <img src={image} alt={title} />
+          <strong>{title}</strong>
+          <span>{priceFormated}</span>
 
-            <button
-              type="button"
-              onClick={async () => this.handleAddProduct(id)}
-            >
-              <div>
-                <MdAddShoppingCart size={16} color="white" /> {amount[id] || 0}
-              </div>
-              <span>adicionar ao carrinho</span>
-            </button>
-          </li>
-        ))}
-      </ProductList>
-    )
-  }
+          <button type="button" onClick={async () => handleAddProduct(id)}>
+            <div>
+              <MdAddShoppingCart size={16} color="white" /> {amount[id] || 0}
+            </div>
+            <span>adicionar ao carrinho</span>
+          </button>
+        </li>
+      ))}
+    </ProductList>
+  )
 }
 
 const mapStateToProps = state => ({
